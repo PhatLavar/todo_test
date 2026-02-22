@@ -6,7 +6,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import models
 import schemas
-from database import engine, get_db
+import os
+from database import engine, get_db, DATABASE_URL
+
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
 
@@ -25,7 +29,10 @@ models.Base.metadata.create_all(bind=engine)
 # root
 @app.get("/")
 def root():
-    return {"message": "Welcome to the backend"}
+    return {
+        "message": "Welcome to the backend",
+        "db_url_loaded": DATABASE_URL is not None,
+    }
 
 # create task (POST)
 @app.post("/tasks", response_model=schemas.TaskResponse)

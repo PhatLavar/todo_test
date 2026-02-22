@@ -22,6 +22,11 @@ app.add_middleware(
 # create tables for the database
 models.Base.metadata.create_all(bind=engine)
 
+# root
+@app.get("/")
+def root():
+    return {"message": "Welcome to the backend"}
+
 # create task (POST)
 @app.post("/tasks", response_model=schemas.TaskResponse)
 def create_task(
